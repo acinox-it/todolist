@@ -13,7 +13,6 @@ Une application de gestion de tâches moderne construite avec **React**, **Vite*
 - 🧭 Routing avec plusieurs pages
 - 🎨 Design moderne avec icônes Heroicons
 - 📊 Compteur de tâches affichées
-- ⚡ Animation d’apparition des tâches
 - 📌 Favicon personnalisable
 
 ---
