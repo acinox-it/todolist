@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import TodoInput from './components/TodoInput';
+import TodoList from './components/TodoList';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([]);
+  const [input, setInput] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    const stored = localStorage.getItem('tasks');
+    if (stored) setTasks(JSON.parse(stored));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = () => {
+    if (input.trim()) {
+      setTasks([...tasks, { id: Date.now(), text: input, completed: false }]);
+      setInput('');
+    }
+  };
+
+  const removeTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'completed') return task.completed;
+    if (filter === 'active') return !task.completed;
+    return true;
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-800 p-6 text-gray-100">
+      <div className="max-w-md mx-auto bg-white text-gray-800 shadow-lg rounded-lg p-6">
+        <h1 className="text-3xl font-bold mb-6 text-yellow-500">📝 To-Do List</h1>
+        <TodoInput input={input} setInput={setInput} addTask={addTask} />
+        <div className="flex gap-2 mb-4">
+          <button onClick={() => setFilter('all')} className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Toutes</button>
+          <button onClick={() => setFilter('active')} className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">À faire</button>
+          <button onClick={() => setFilter('completed')} className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Terminées</button>
+        </div>
+        <TodoList tasks={filteredTasks} removeTask={removeTask} toggleTask={toggleTask} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+
+  );
 }
 
-export default App
+export default App;
