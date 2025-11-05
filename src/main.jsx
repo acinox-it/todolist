@@ -8,7 +8,7 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename='/todolist'>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
