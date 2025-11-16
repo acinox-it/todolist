@@ -64,7 +64,7 @@ TODOLIST/
 
 ```bash
 # 1. Cloner le projet
-git clone https://github.com/ton-utilisateur/todolist-app.git
+  git clone https://github.com/acinox-it/todolist-app.git
 cd todolist-app
 
 # 2. Installer les dépendances
